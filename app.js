@@ -22,8 +22,11 @@ mongoose.connect(process.env.DATABASE)
 
 
 const itemRoutes = require('./routes/itemRouter');
+const userRoutes = require('./routes/userRouter');
 
-app.use('/', itemRoutes);
+app.use('/item', itemRoutes);
+app.use('/user', userRoutes);
+
 
 app.listen(3000, function () {
   console.log('*** CineMatch app listening on port 3000');

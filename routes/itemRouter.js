@@ -4,7 +4,7 @@ const { addItem} = require('../controllers/itemController')
 
 
 
-router.post('/items/addItem', addItem)
+router.post('/addItem', addItem)
 
 
 module.exports = router;

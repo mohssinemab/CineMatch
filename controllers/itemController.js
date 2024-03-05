@@ -2,7 +2,7 @@ const ItemModel = require("../models/Item")
 
 
 exports.addItem = async (req, res) => {
-    console.log(req.body);
+    // console.log(req.body);
     try{
         if (req.body.url && req.body.note) {
             let item = ItemModel({
@@ -11,7 +11,8 @@ exports.addItem = async (req, res) => {
             })
 
             await item.save();
-            
+
+            console.log("Item : ["+item+"] is well stored");
             res.send("Item : ["+item+"] is well stored");
         } else {
             console.log("Missing some info (Item : url, note)")
