@@ -23,9 +23,12 @@ mongoose.connect(process.env.DATABASE)
 
 const itemRoutes = require('./routes/itemRouter');
 const userRoutes = require('./routes/userRouter');
+const movieRoutes = require('./routes/movieRouter');
+
 
 app.use('/item', itemRoutes);
 app.use('/user', userRoutes);
+app.use('/movie', movieRoutes);
 
 
 app.listen(3000, function () {

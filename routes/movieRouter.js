@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-// const { addItem} = require('../controllers/itemController')
+const { getTrending} = require('../controllers/movieController')
 
 
 
-router.post('/movies/addItem', addItem)
+router.get('/getTrending', getTrending)
 
 
 module.exports = router;

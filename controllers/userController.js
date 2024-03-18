@@ -22,10 +22,9 @@ exports.registerUser = async (req, res) => {
             })
             
             await user.save();
-            
-            
-            console.log("User is well stored");
-            res.send("User is well stored");
+                        
+            console.log("Well registred ! ");
+            res.send("Well registred ! ");
         } else {
             console.log("Missing some info (User : name, username, password)")
     
@@ -37,30 +36,6 @@ exports.registerUser = async (req, res) => {
 
 }
 
-
-exports.loginUser = async (req, res) => {
-    // console.log(req.body);
-    try{
-        if (req.body.usename && req.body.password) {
-            let item = ItemModel({
-                url: req.body.url,
-                note: req.body.note
-            })
-
-            
-
-            console.log("Item : ["+item+"] is well stored");
-            res.send("Item : ["+item+"] is well stored");
-        } else {
-            console.log("Missing some info (Item : url, note)")
-    
-        }
-    } catch (error) {
-        console.error('Error adding item:', error);
-        res.status(500).send('Internal Server Error');
-    }
-
-}
 
 
 exports.loginUser = (req, res) => {
