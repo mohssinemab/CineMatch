@@ -1,6 +1,9 @@
 var express = require('express');
 var app = express();
 var mongoose = require('mongoose');
+const cors = require('cors');
+app.use(cors());
+
 
 
 app.use(express.json()); // Middleware to parse JSON bodies
@@ -24,11 +27,13 @@ mongoose.connect(process.env.DATABASE)
 const itemRoutes = require('./routes/itemRouter');
 const userRoutes = require('./routes/userRouter');
 const movieRoutes = require('./routes/movieRouter');
+const trendRoutes = require('./routes/trendingRouter');
 
 
 app.use('/item', itemRoutes);
 app.use('/user', userRoutes);
 app.use('/movie', movieRoutes);
+app.use('/trend', trendRoutes);
 
 
 app.listen(3000, function () {

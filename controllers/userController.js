@@ -24,9 +24,9 @@ exports.registerUser = async (req, res) => {
             await user.save();
                         
             console.log("Well registred ! ");
-            res.send("Well registred ! ");
+            res.status(200).json({ message: "Well registered ! " });
         } else {
-            console.log("Missing some info (User : name, username, password)")
+          res.status(400).json({ message: "Missing some info (User : name, username, password)" });
     
         }
     } catch (error) {

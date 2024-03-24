@@ -1,7 +1,6 @@
 const fetch = require('node-fetch');
 
-const url = 'https://api.themoviedb.org/3/movie/changes?page=1';
-
+const url = 'https://api.themoviedb.org/3/trending/all/week?language=en-US';
 const options = {
   method: 'GET',
   headers: {
@@ -14,13 +13,3 @@ fetch(url, options)
   .then(res => res.json())
   .then(json => console.log(json))
   .catch(err => console.error('error:' + err));
-
-  
-// // -Get a movie by id
-// const url2  = 'https://api.themoviedb.org/3/movie/1229760';
-
-
-// fetch(url2, options)
-//   .then(res => res.json())
-//   .then(json => console.log(json))
-//   .catch(err => console.error('error:' + err));
