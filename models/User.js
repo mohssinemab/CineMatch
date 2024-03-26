@@ -1,10 +1,11 @@
 const mongoose = require("mongoose");
 
-//Le model d'un utilisateur
+// User model
 const userSchema = new mongoose.Schema({
-    username: {
+    username: { // Unique username
         type: String,
         required: true,
+        unique: true,
     },
     name: {
         type: String,
@@ -18,7 +19,8 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    favoriteGenres: [{ type: String }]
+    favoriteGenres: [{ type: String }], // Array of genres
+    wishlist: [{ type: Number }]  // Array of movie IDs
 }, { timestamps: true })
 
 module.exports = mongoose.model('User', userSchema);

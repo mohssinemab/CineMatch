@@ -12,10 +12,12 @@
     "axios": "^1.6.8",
     "swiper": "^8.4.7",
     "vue": "^3.4.21",
-    "vue-awesome-swiper": "^5.0.1"
+    "vue-awesome-swiper": "^5.0.1",
+    "vue-router": "^4.3.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
-    "vite": "^5.2.0"
+    "vite": "^5.2.0",
+    "webpack": "^5.91.0"
   }
 }
