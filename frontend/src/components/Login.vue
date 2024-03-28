@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div class="login-container">
         <h1>Login</h1>
-        <form @submit="login">
+        <form @submit="login" class="login-form">
             <div>
                 <label for="username">Username:</label>
                 <input type="text" id="username" v-model="username" required>
@@ -13,7 +13,7 @@
             </div>
 
             <div>
-                <button type="submit">Login</button>
+                <button type="submit" class="submit-btn">Login</button>
             </div>
 
             <transition name="fade">
@@ -47,24 +47,23 @@ export default {
                     username: this.username,
                     password: this.password,
                 }),
-            })
-                .then(response => {
-                    if (response.ok) {
-                        this.loginSuccess = true;
+            }).then(response => {
+                if (response.ok) {
+                    this.loginSuccess = true;
 
-                        setTimeout(() => {
-                            this.$store.commit('login');
-                            this.$router.push('/');
-                        }, 2000);
-                    } else {
-                        this.loginFailed = true;
-                    }
-                    if (response.headers.get('Content-Type') === 'application/json') {
-                        return response.json();
-                    } else {
-                        return response.text();
-                    }
-                })
+                    setTimeout(() => {
+                        this.$store.commit('login');
+                        this.$router.push('/');
+                    }, 2000);
+                } else {
+                    this.loginFailed = true;
+                }
+                if (response.headers.get('Content-Type') === 'application/json') {
+                    return response.json();
+                } else {
+                    return response.text();
+                }
+            })
                 .then(data => {
                     console.log(data);
                 })
@@ -77,53 +76,69 @@ export default {
 </script>
 
 <style scoped>
-form {
-    background-color: #fff;
-    padding: 2em;
-    margin-bottom: 2em;
-    border-radius: 5px;
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  padding: 1em;
+  box-sizing: border-box;
 }
 
-form input[type="text"],
-form input[type="password"],
-form input[type="email"] {
-    width: 100%;
-    padding: 1em;
-    margin-bottom: 1em;
-    border-radius: 5px;
-    border: 1px solid #ddd;
+.login-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px; /* Increase max-width */
+  background: #e7e7e7;
+  padding: 30px; /* Increase padding */
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
 }
 
-form button {
-    padding: 1em 2em;
-    background-color: #333;
-    color: #fff;
+.login-form .form-group {
+  margin-bottom: 1em;
+}
+
+.login-form label {
+  margin-bottom: 0.5em;
+}
+
+.login-form input {
+  padding: 0.5em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 1.7em; 
+}
+
+.login-form {
+    /* padding: 10px;
+    border-radius: 4px;
     border: none;
-    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
     cursor: pointer;
+    transition: background-color 0.3s ease; */
 }
 
-form button:hover {
-    background-color: #444;
+.submit-btn {
+    padding: 12px;
+    border-radius: 4px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.success-message {
-    color: green;
-    margin-top: 1em;
-}
 
-.error-message {
-    color: red;
-    margin-top: 1em;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity .5s;
-}
-
-.fade-enter,
-.fade-leave-to {
-    opacity: 0;
+/* Responsive styles */
+@media (max-width: 600px) {
+  .login-form {
+    padding: 1em;
+  }
 }
 </style>

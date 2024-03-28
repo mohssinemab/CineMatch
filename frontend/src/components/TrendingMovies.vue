@@ -7,6 +7,12 @@
           <router-link :to="`/movie/${item.id}`"> 
             <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path" alt="Item poster">
           </router-link> 
+          <font-awesome-icon icon="heart" 
+             v-if="isMovieInWishlist(item.id)" 
+             @click.stop="removeFromWishlist(item.id)"/>
+          <font-awesome-icon icon="heart" 
+             v-else 
+             @click.stop="addToWishlist(item.id)"/>
         </swiper-slide>
       </swiper>
 
@@ -19,11 +25,15 @@
         <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path" alt="Item poster">
         </router-link> 
         <h2>{{ item.title }}</h2>
+        <font-awesome-icon icon="heart" 
+           v-if="isMovieInWishlist(item.id)" 
+           @click.stop="removeFromWishlist(item.id)"/>
+        <font-awesome-icon icon="heart" 
+           v-else 
+           @click.stop="addToWishlist(item.id)"/>
       </div>
     </div>
-    
   </div>
-  
 </template>
 
 <script>
@@ -46,27 +56,43 @@ export default {
         loop: false,
         slidesPerView: 'auto',
         centeredSlides: true,
-        spaceBetween: 0,
-        autoplay: {
-          delay: 3000,
-          disableOnInteraction: false,
-        },
-        pagination: {
-          el: '.swiper-pagination',
-          clickable: true,
-        },
-        navigation: { 
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
-        },
       },
+      wishlist: [],
     };
   },
-  async created() {
-    const response = await axios.get('http://localhost:3000/trend/getTrending');
-    this.items = response.data;
-    this.slideshowItems = this.items.slice(0, 9);
-    this.otherItems = this.items.slice(9);
+  methods: {
+    addToWishlist(movieId) {
+      axios.post('http://localhost:3000/user/addToWishList', { movieId })
+        .then(() => {
+          this.getWishlist();
+        });
+    },
+    removeFromWishlist(movieId) {
+      axios.post('http://localhost:3000/user/removeFromWishList', { movieId })
+        .then(() => {
+          this.getWishlist();
+        });
+    },
+    getWishlist() {
+      axios.get('http://localhost:3000/user/getWishList')
+        .then(response => {
+          this.wishlist = response.data;
+        });
+    },
+    isMovieInWishlist(movieId) {
+      return this.wishlist.some(movie => movie.id === movieId);
+    },
+    getAllMovies() {
+      axios.get('http://localhost:3000/trend/getTrending')
+        .then(response => {
+          this.items = response.data;
+          this.slideshowItems = this.items.slice(0, 10);
+          this.otherItems = this.items.slice(5);
+        });
+    },
+  },
+  created() {
+    this.getAllMovies();
   },
 };
 </script>

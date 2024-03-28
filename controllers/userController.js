@@ -15,7 +15,7 @@ exports.registerUser = async (req, res) => {
       pass = await bcrypt.hash(pass, salt);
 
       const favGenres = req.body.favoriteGenres? req.body.favoriteGenres : [];
-
+      
       let user = UserModel({
         username: req.body.username,
         password: pass,
