@@ -12,11 +12,14 @@
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/vue-fontawesome": "^3.0.6",
+    "@vuetify/vite-plugin": "^1.0.0-alpha.11",
     "axios": "^1.6.8",
     "swiper": "^8.4.7",
+    "vite-plugin-vuetify": "^2.0.3",
     "vue": "^3.4.21",
     "vue-awesome-swiper": "^5.0.1",
-    "vue-router": "^4.3.0"
+    "vue-router": "^4.3.0",
+    "vuetify": "^3.4.0-beta.1"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",

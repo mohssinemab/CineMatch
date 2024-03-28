@@ -5,6 +5,7 @@
       <h1>Please log in to see trending movies.</h1>
     </div>
   </div>
+
 </template>
 
 <script>

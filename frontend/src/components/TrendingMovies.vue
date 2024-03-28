@@ -1,38 +1,32 @@
 <template>
   <div>
-    <div class="swiper-container">
-      <swiper :options="swiperOptions">
-        <!-- Your slides go here -->
-        <swiper-slide v-for="item in slideshowItems" :key="item.id">
-          <router-link :to="`/movie/${item.id}`"> 
-            <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path" alt="Item poster">
-          </router-link> 
-          <font-awesome-icon icon="heart" 
-             v-if="isMovieInWishlist(item.id)" 
-             @click.stop="removeFromWishlist(item.id)"/>
-          <font-awesome-icon icon="heart" 
-             v-else 
-             @click.stop="addToWishlist(item.id)"/>
-        </swiper-slide>
-      </swiper>
+    <v-carousel v-if="isDataLoaded" cycle height="850">
+      <v-carousel-item v-for="item in slideshowItems" :key="item.id">
+        <router-link :to="`/movie/${item.id}`">
+          <v-img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path" aspect-ratio="1.5" class="hover-effect">
+            <v-container class="fill-height">
+              <v-row align="center" justify="center">
+                <v-carousel-delimiters :length="slideshowItems.length" />
+              </v-row>
+            </v-container>
+          </v-img>
+        </router-link>
+      </v-carousel-item>
+    </v-carousel>
 
-      <div class="swiper-button-next"></div>
-      <div class="swiper-button-prev"></div>
-    </div>
-    <div class="container">
-      <div class="item" v-for="item in otherItems" :key="item.id">
-        <router-link :to="`/movie/${item.id}`"> 
-        <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path" alt="Item poster">
-        </router-link> 
-        <h2>{{ item.title }}</h2>
-        <font-awesome-icon icon="heart" 
-           v-if="isMovieInWishlist(item.id)" 
-           @click.stop="removeFromWishlist(item.id)"/>
-        <font-awesome-icon icon="heart" 
-           v-else 
-           @click.stop="addToWishlist(item.id)"/>
-      </div>
-    </div>
+    <v-container>
+      <v-row>
+        <v-col cols="12" sm="6" md="4" lg="4" v-for="item in otherItems" :key="item.id">
+          <router-link :to="`/movie/${item.id}`"> <!-- Use template literals to construct the route -->
+            <v-card class="elevation-2 mb-4 item" @click="logId(item.id)">
+              <v-img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path" aspect-ratio="1.5">
+              </v-img>
+              <v-card-title class="text-center font-weight-bold pa-4">{{ item.title }}</v-card-title>
+            </v-card>
+          </router-link>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
@@ -57,38 +51,21 @@ export default {
         slidesPerView: 'auto',
         centeredSlides: true,
       },
-      wishlist: [],
+      isDataLoaded: false, // new data property
     };
   },
   methods: {
-    addToWishlist(movieId) {
-      axios.post('http://localhost:3000/user/addToWishList', { movieId })
-        .then(() => {
-          this.getWishlist();
-        });
-    },
-    removeFromWishlist(movieId) {
-      axios.post('http://localhost:3000/user/removeFromWishList', { movieId })
-        .then(() => {
-          this.getWishlist();
-        });
-    },
-    getWishlist() {
-      axios.get('http://localhost:3000/user/getWishList')
-        .then(response => {
-          this.wishlist = response.data;
-        });
-    },
-    isMovieInWishlist(movieId) {
-      return this.wishlist.some(movie => movie.id === movieId);
-    },
     getAllMovies() {
       axios.get('http://localhost:3000/trend/getTrending')
         .then(response => {
           this.items = response.data;
           this.slideshowItems = this.items.slice(0, 10);
           this.otherItems = this.items.slice(5);
+          this.isDataLoaded = true; // set isDataLoaded to true after data is loaded
         });
+    },
+    logId(id) {
+      console.log(id);
     },
   },
   created() {
@@ -108,6 +85,10 @@ export default {
   margin-top: 50px;
 }
 
+.v-container {
+  margin-top: 20px;
+}
+
 .swiper-container {
   margin: 20px;
   margin-bottom: 40px;
@@ -118,26 +99,26 @@ export default {
   margin-right: 20px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   transition: 0.3s;
-  cursor: pointer; /* Change cursor to pointer when hovering over the slide */
+  cursor: pointer;
+  /* Change cursor to pointer when hovering over the slide */
 }
 
 .swiper-slide:hover {
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-  transform: scale(0.98); /* Scale the slide down to 98% when hovered */
+  transform: scale(0.98);
+  /* Scale the slide down to 98% when hovered */
 }
 
 .item {
-  width: calc(100% / 4 - 10px);
-  margin: 1em;
-  padding-top: 1.5em;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  transition: 0.3s;
-  cursor: pointer; /* Change cursor to pointer when hovering over the card */
+  transition: transform 0.3s ease-in-out;
+  /* Add a transition to the transform property */
+  cursor: pointer;
+  /* Change the cursor to a pointer when hovering over the card */
 }
 
 .item:hover {
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-  transform: scale(1.02); /* Scale the card up to 102% when hovered */
+  transform: scale(1.02);
+  /* Scale the card up to 105% when hovered */
 }
 
 .item img {
@@ -152,26 +133,54 @@ export default {
   font-size: 1.2em;
 }
 
-.swiper-button-next, .swiper-button-prev {
-  position: absolute;
-  top: 50%;
-  width: 27px;
-  height: 44px;
-  margin-top: -22px;
-  z-index: 10;
-  cursor: pointer;
-  background-size: 27px 44px;
-  background-position: center;
+.v-card {
+  background-color: #f8f9fa;
+  /* Light gray background */
+  border-radius: 0.25rem;
+  /* Rounded corners */
+}
+
+.v-card-title {
+  color: #343a40;
+  /* Dark gray text */
+}
+
+.hover-effect {
+  transition: transform 0.3s;
+}
+
+.hover-effect:hover {
+  transform: scale(1.05);
+}
+
+.v-carousel__controls__item {
+  border-radius: 50%;
+  /* background-color: #dd2020; Change the color to make the images visible */
+  opacity: 0.8;
+  width: 50px;
+  /* Adjust the size of the buttons */
+  height: 50px;
+  background-size: contain;
+  /* Make the images fit within the buttons */
+}
+
+.v-carousel__controls__item--prev {
+
+  background-image: url('./assets/prev_arrow.png');
   background-repeat: no-repeat;
+  /* Do not repeat the images */
+  background-position: center;
+  /* Center the images */
 }
 
-.swiper-button-next {
-  right: 10px;
-  background-image: url('path_to_next_arrow_image');
+.v-carousel__controls__item--next {
+  background-image: url('./assets/next_arrow.png');
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
-.swiper-button-prev {
-  left: 10px;
-  background-image: url('path_to_prev_arrow_image');
+.v-carousel__delimiter {
+  background-color: #cc1515;
+  opacity: 0.8;
 }
 </style>

@@ -1,32 +1,34 @@
 <template>
-    <div class="movie-desc">
-        <div class="movie-info">
-            <h1>{{ movie.title }}</h1>
-            <div class="poster-container">
-                <div class="image-container">
-                    <img v-if="loading" src="../assets/spinner.gif" alt="Loading...">
-                    <img v-else :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" alt="Movie poster" @load="loading = false">
-                </div>
-            </div>
-            <div class="details">
-                <p><strong>Genres:</strong> {{ genres }}</p>
-                <p><strong>Language:</strong> {{ movie.original_language }}</p>
-                <p><strong>Release Date:</strong> {{ formattedReleaseDate }}</p>
-                <p><strong>Production Companies:</strong></p>
-                <ul class="production-companies">
-                    <li v-for="company in movie.production_companies" :key="company.id">
-                        <img :src="getCompanyLogo(company)" :alt="company.name + ' logo'" loading="lazy">
-                        <span>{{ company.name }}</span>
-                    </li>
-                </ul>
-                <p><strong>Production Countries:</strong> {{ formattedProductionCountries }}</p>
-            </div>
-        </div>
-        <div class="overview">
-            <h2>Overview</h2>
-            <p>{{ movie.overview }}</p>
-        </div>
-    </div>
+    <v-container class="movie-desc">
+        <v-row>
+            <v-col cols="12" md="6">
+                <v-card>
+                    <v-img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" alt="Movie poster"
+                        @load="loading = false" height="450px"></v-img> <v-card-title class="headline">{{ movie.title
+                        }}</v-card-title>
+                    <v-card-subtitle>{{ formattedReleaseDate }}</v-card-subtitle>
+                    <v-card-text>
+                        <p><strong>Genres:</strong> {{ genres }}</p>
+                        <p><strong>Language:</strong> {{ movie.original_language }}</p>
+                        <p><strong>Production Companies:</strong></p>
+                        <ul class="production-companies">
+                            <li v-for="company in movie.production_companies" :key="company.id">
+                                <img :src="getCompanyLogo(company)" :alt="company.name + ' logo'" loading="lazy">
+                                <span>{{ company.name }}</span>
+                            </li>
+                        </ul>
+                        <p><strong>Production Countries:</strong> {{ formattedProductionCountries }}</p>
+                    </v-card-text>
+                </v-card>
+            </v-col>
+            <v-col cols="12" md="6">
+                <v-card>
+                    <v-card-title class="headline">Overview</v-card-title>
+                    <v-card-text>{{ movie.overview }}</v-card-text>
+                </v-card>
+            </v-col>
+        </v-row>
+    </v-container>
 </template>
 
 <script>
@@ -87,37 +89,6 @@ export default {
     padding: 20px;
 }
 
-.movie-info {
-    flex: 1;
-    max-width: 600px;
-    margin-right: 20px;
-}
-
-.image-container {
-    width: 500px; /* Adjust as needed */
-    height: 750px; /* Adjust as needed */
-    position: relative;
-}
-
-.image-container img {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    max-width: 100%;
-    height: auto;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-}
-
-/* .image-container img:hover {
-    transform: scale(1.015);
-} */
-
-.details p {
-    margin: 8px 0;
-}
-
 .production-companies {
     list-style: none;
     padding: 0;
@@ -140,22 +111,5 @@ export default {
 .production-companies span {
     font-size: 14px;
     font-weight: bold;
-}
-
-.overview {
-    flex: 1;
-    max-width: 600px;
-}
-
-.overview h2 {
-    margin-bottom: 16px;
-    color: #ff5733;
-    /* Highlight color */
-}
-
-.overview p {
-    line-height: 1.6;
-    color: #777;
-    /* Text color */
 }
 </style>
