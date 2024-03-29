@@ -2,19 +2,17 @@ var express = require('express');
 var app = express();
 var mongoose = require('mongoose');
 const cors = require('cors');
+const morgan = require('morgan');
+
 app.use(cors());
-
-
-
-app.use(express.json()); // Middleware to parse JSON bodies
-app.use(express.urlencoded({ extended: true })); // Middleware to parse URL-encoded bodies
-
+app.use(express.json());
+app.use(express.urlencoded({ extended: true })); 
+app.use(morgan('dev'));
 
 app.get('/', function (req, res) {
   res.send('-- Hello World!');
 });
 
-//Le fichier .env pour le stockage des url,logins,ports...
 require('dotenv').config();
 
 

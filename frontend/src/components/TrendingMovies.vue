@@ -1,13 +1,13 @@
 <template>
   <div>
-    <v-carousel v-if="isDataLoaded" cycle height="850">
+    <v-carousel v-if="isDataLoaded" cycle height="650">
       <v-carousel-item v-for="item in slideshowItems" :key="item.id">
         <router-link :to="`/movie/${item.id}`">
           <v-img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path" aspect-ratio="1.5" class="hover-effect">
             <v-container class="fill-height">
-              <v-row align="center" justify="center">
+              <!-- <v-row align="center" justify="center">
                 <v-carousel-delimiters :length="slideshowItems.length" />
-              </v-row>
+              </v-row> -->
             </v-container>
           </v-img>
         </router-link>

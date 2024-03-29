@@ -4,20 +4,28 @@
             <v-col cols="12" md="6">
                 <v-card>
                     <v-img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" alt="Movie poster"
-                        @load="loading = false" height="450px"></v-img> <v-card-title class="headline">{{ movie.title
-                        }}</v-card-title>
+                        @load="loading = false" height="450px"></v-img>
+                    <v-card-title class="headline">{{ movie.title }}</v-card-title>
                     <v-card-subtitle>{{ formattedReleaseDate }}</v-card-subtitle>
                     <v-card-text>
-                        <p><strong>Genres:</strong> {{ genres }}</p>
+                        <p><strong>Genres:</strong></p>
+                        <v-chip v-for="genre in movie.genres" :key="genre.id" small>{{ genre.name }}</v-chip>
                         <p><strong>Language:</strong> {{ movie.original_language }}</p>
+                        <p><strong>Rating:</strong></p>
+                        <v-rating v-model="movie.vote_average" readonly half-increments></v-rating>
                         <p><strong>Production Companies:</strong></p>
                         <ul class="production-companies">
                             <li v-for="company in movie.production_companies" :key="company.id">
                                 <img :src="getCompanyLogo(company)" :alt="company.name + ' logo'" loading="lazy">
-                                <span>{{ company.name }}</span>
+                                <small>{{ company.name }}</small>
                             </li>
                         </ul>
                         <p><strong>Production Countries:</strong> {{ formattedProductionCountries }}</p>
+                    </v-card-text>
+                    <v-card-text>
+                        <!-- ... rest of the card text ... -->
+                        <p><strong>Your Rating:</strong></p>
+                        <v-rating v-model="userRating" @input="saveRating" half-increments></v-rating>
                     </v-card-text>
                 </v-card>
             </v-col>
