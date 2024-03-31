@@ -20,6 +20,8 @@
               </v-img>
               <v-card-title class="text-center font-weight-bold pa-4">{{ item.title }}</v-card-title>
               <v-card-text class="text-center">{{ item.genres.join(', ') }}</v-card-text>
+              <v-btn @click="addToWishlist(item)">Add to wishlist</v-btn>
+
             </v-card>
           </router-link>
         </v-col>
@@ -53,34 +55,47 @@ export default {
       },
       isDataLoaded: false,
       selectedGenre: { id: 'All', name: 'All' },
-      genres: [],
+      genres: genresData.genres,
       genreMap: {},
       isLoading: true,
       selectedGenreName: null,
+      wishlist: [], // New data property for the wishlist
+
     };
   },
   computed: {
     genreNames() {
-      return this.genres.map(genre => genre.name);
+      return ['All', ...this.genres.map(genre => genre.name)];
     },
     filteredOtherItems() {
-    if (!this.selectedGenreName || this.selectedGenreName === 'All') {
-      return this.otherItems;
-    }
-    return this.otherItems.filter(item => item.genres.includes(this.selectedGenreName));
-  },
+      if (!this.selectedGenreName || this.selectedGenreName === 'All') {
+        return this.otherItems;
+      }
+      return this.otherItems.filter(item => item.genres.includes(this.selectedGenreName));
+    },
   },
   methods: {
-    getGenres() {
-      const apiKey = import.meta.env.VITE_APP_API_KEY;
-      axios.get(`https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=en`)
-        .then(response => {
-          this.genres = [{ id: 'All', name: 'All' }, ...response.data.genres];
-          this.selectedGenre = this.genres[0]; // Set the default selected genre to 'All'
-        })
-        .catch(error => {
-          console.error('Error fetching genres:', error);
+    async addToWishlist(movie) {
+      try {
+        const response = await axios.post('http://localhost:3000/user/addToWishlist', {
+          username: this.username, // Replace this with the actual username
+          movieID: movie.id,
         });
+
+        if (response.status === 200) {
+          // The movie was successfully added to the wishlist
+          // You can add the movie to the local wishlist here if you want
+          if (!this.wishlist.find(item => item.id === movie.id)) {
+            this.wishlist.push(movie);
+          }
+        } else {
+          // Handle the error
+          console.error('Failed to add the movie to the wishlist');
+        }
+      } catch (error) {
+        // Handle the error
+        console.error('Failed to add the movie to the wishlist', error);
+      }
     },
     getAllMovies() {
       axios.get('http://localhost:3000/trend/getTrending')
@@ -100,7 +115,6 @@ export default {
     },
   },
   created() {
-    this.getGenres();
     this.getAllMovies();
   },
 };
