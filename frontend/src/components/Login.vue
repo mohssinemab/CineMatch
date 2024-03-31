@@ -52,10 +52,14 @@ export default {
                     response.json().then(data => {
                         console.log('Data:', data);
                         localStorage.setItem('token', data.token); // Store the token
-                        localStorage.setItem('userName', data.name); // Store the user's name
+                        localStorage.setItem('name', data.name); // Store the user's name
+                        localStorage.setItem('username', data.username); // Store the user's name
+
 
                         setTimeout(() => {
                             this.$store.commit('login', data.name); // Pass the user's name to the login mutation
+                            this.$store.commit('setUsername', data.username);
+                            this.$store.commit('setLoggedIn', true); // Update the loggedIn state
                             this.$router.push('/');
                         }, 2000);
                     });

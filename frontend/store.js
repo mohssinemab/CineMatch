@@ -6,25 +6,32 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     isLoggedIn: false,
-    userName: '',
+    name: '',
+    username: '', // New state
     searchResults: [],
     isSearching: false
   },
   mutations: {
-    login(state, userName) {
+    login(state, name) {
       state.isLoggedIn = true;
-      state.userName = userName;
+      state.name = name;
+    },
+    setUsername(state, username) { // New mutation
+      state.username = username;
     },
     logout(state) {
       state.isLoggedIn = false;
-      state.userName = '';
+      state.name = '';
     },
     setSearchResults(state, results) {
       state.searchResults = results;
     },
     setIsSearching(state, value) {
       state.isSearching = value;
-    }
+    },
+    setLoggedIn(state, status) {
+      state.isLoggedIn = status;
+    },
   },
   actions: {
     updateSearchResults({ commit }, results) {

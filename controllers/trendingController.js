@@ -30,7 +30,7 @@ exports.getTrending = async (req, res) => {
         genres : item.genre_ids.map(id => genreIdToName[id] || 'Unknown')
       }));
   
-      console.log("All trending done homie : ", data );
+      console.log("All trending done homie : ");
       res.status(200).send(data);
     } catch (error) {
       console.error("Error getting trending : ", error);

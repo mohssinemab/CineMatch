@@ -1,53 +1,65 @@
-import { createApp } from 'vue';
-import { createRouter, createWebHistory } from 'vue-router';
-import { createStore } from 'vuex';
-import App from './App.vue';
-import Home from './components/Home.vue';
-import Register from './components/Register.vue';
-import Login from './components/Login.vue';
-import MovieDesc from './components/MovieDesc.vue';
-import { createVuetify } from 'vuetify';
-import 'vuetify/dist/vuetify.min.css';
+import { createApp } from "vue";
+import { createRouter, createWebHistory } from "vue-router";
+import { createStore } from "vuex";
+import App from "./App.vue";
+import Home from "./components/Home.vue";
+import Register from "./components/Register.vue";
+import Login from "./components/Login.vue";
+import MovieDesc from "./components/MovieDesc.vue";
+import WishList from "./components/WishList.vue";
+
+import { createVuetify } from "vuetify";
+import "vuetify/dist/vuetify.min.css";
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: '/', component: Home },
-    { path: '/register', component: Register },
-    { path: '/login', component: Login },
-    { path: '/movie/:id', component: MovieDesc }
+    { path: "/", component: Home },
+    { path: "/register", component: Register },
+    { path: "/login", component: Login },
+    { path: "/movie/:id", component: MovieDesc },
+    { path: "/WishList", component: WishList },
+
   ],
 });
 
 const store = createStore({
   state: {
     isLoggedIn: false,
-    userName: null,
-    searchResults: [], // Add this line
-    isSearching: false // Add this line
+    name: null,
+    username: "",
+    searchResults: [],
+    isSearching: false,
   },
   mutations: {
-    login(state, userName) {
+    login(state, name) {
       state.isLoggedIn = true;
-      state.userName = userName;
+      state.name = name;
+    },
+    setUsername(state, username) {
+      // Add this line
+      state.username = username;
     },
     logout(state) {
       state.isLoggedIn = false;
-      state.userName = null;
+      state.name = null;
     },
-    setSearchResults(state, results) { // Add this line
+    setSearchResults(state, results) {
       state.searchResults = results;
     },
-    setIsSearching(state, value) { // Add this line
+    setIsSearching(state, value) {
       state.isSearching = value;
-    }
+    },
+    setLoggedIn(state, status) {
+      state.isLoggedIn = status;
+    },
   },
   actions: {
-    updateSearchResults({ commit }, results) { // Add this line
-      commit('setSearchResults', results);
-      commit('setIsSearching', results.length > 0);
-    }
-  }
+    updateSearchResults({ commit }, results) {
+      commit("setSearchResults", results);
+      commit("setIsSearching", results.length > 0);
+    },
+  },
 });
 
 const vuetify = createVuetify({
@@ -55,16 +67,16 @@ const vuetify = createVuetify({
     dark: true,
     themes: {
       dark: {
-        primary: '#1976D2',
-        secondary: '#424242',
-        accent: '#82B1FF',
-        error: '#FF5252',
-        info: '#2196F3',
-        success: '#4CAF50',
-        warning: '#FFC107'
-      }
-    }
-  }
-})
+        primary: "#1976D2",
+        secondary: "#424242",
+        accent: "#82B1FF",
+        error: "#FF5252",
+        info: "#2196F3",
+        success: "#4CAF50",
+        warning: "#FFC107",
+      },
+    },
+  },
+});
 
-createApp(App).use(router).use(store).use(vuetify).mount('#app');
+createApp(App).use(router).use(store).use(vuetify).mount("#app");

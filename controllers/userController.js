@@ -42,9 +42,9 @@ exports.loginUser = (req, res) => {
   const userU = req.body.username;
   const passwordU = req.body.password;
   UserModel.findOne({ username: userU }).then((user) => {
-    console.log(user);
+    console.log("user : ",user);
     if (user) {
-      console.log(passwordU);
+      console.log("password : ",passwordU);
       bcrypt.compare(passwordU, user.password).then((result) => {
         console.log(result);
         if (result) {
@@ -61,6 +61,7 @@ exports.loginUser = (req, res) => {
           );
           return res.status(200).json({
             name : user.name,
+            username : user.username,
             message: "login success",
             token: token,
           });
@@ -80,13 +81,16 @@ exports.addToWishList = async (req, res) => {
   try {
     const username = req.body.username;
     const movieId = req.body.movieId;
-
+    console.log(username, movieId);
     if (!movieId) {
+      console.log("Missing movieId");
       return res.status(400).json({ message: "Missing movieId" });
     }
 
     const user = await UserModel.findOne({ username: username });
     if (!user) {
+      console.log("Missing user");
+
       return res.status(404).json({ message: "User not found" });
     }
 
@@ -168,7 +172,7 @@ exports.isLogged = (req, res, next) => {
       return res.sendStatus(403);
     }
 
-    console.log('User verified:', user); // Log the verified user
+    // console.log('User verified:', user); // Log the verified user
     req.user = user;
     next(); // pass the execution off to whatever request the client intended
   });

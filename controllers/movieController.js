@@ -16,7 +16,7 @@ exports.getMovieDesc = async (req, res) => {
 
   axios(url, options)
   .then((response) => {
-    console.log("Movie Desc : ",response.data);
+    // console.log("Movie Desc : ",response.data);
       res.json(response.data); 
   })
   .catch((err) => {

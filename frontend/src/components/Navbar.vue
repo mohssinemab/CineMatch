@@ -10,7 +10,8 @@
         </div>
 
         <div v-if="isLoggedIn">
-            <span>Welcome, {{ userName }}</span>
+            <span>Welcome, {{ name }}</span>
+            <router-link to="/wishlist" class="nav-link">Wishlist</router-link>
             <button @click="logout" class="nav-link">Logout</button>
         </div>
         <div v-else>
@@ -31,13 +32,16 @@ export default {
         };
     },
     computed: {
-        ...mapState(['isLoggedIn', 'userName'])
+        ...mapState(['isLoggedIn', 'name'])
     },
     methods: {
         logout() {
             this.$store.commit('logout');
             localStorage.removeItem('token');
-            localStorage.removeItem('userName');
+            localStorage.removeItem('name');
+            localStorage.removeItem('username');
+            this.$store.commit('setLoggedIn', false); // Update the loggedIn state
+
             this.$router.push('/');
         },
         searchMovies() {

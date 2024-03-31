@@ -12,18 +12,25 @@
     </v-carousel>
 
     <v-container>
-      <v-select :items="genreNames" v-model="selectedGenreName" label="Select a genre" outlined></v-select> <v-row>
+      <v-select :items="genreNames" v-model="selectedGenreName" label="Select a genre" outlined></v-select>
+      <v-row>
         <v-col cols="12" sm="6" md="4" lg="4" v-for="item in filteredOtherItems" :key="item.id">
-          <router-link :to="`/movie/${item.id}`">
-            <v-card class="elevation-2 mb-4 item" @click="logId(item.id)">
-              <v-img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path" aspect-ratio="1">
-              </v-img>
-              <v-card-title class="text-center font-weight-bold pa-4">{{ item.title }}</v-card-title>
-              <v-card-text class="text-center">{{ item.genres.join(', ') }}</v-card-text>
-              <v-btn @click="addToWishlist(item)">Add to wishlist</v-btn>
-
-            </v-card>
-          </router-link>
+          <v-card class="elevation-2 mb-4 item">
+            <v-card-actions class="pa-0">
+              <v-spacer></v-spacer>
+              <v-icon v-if="$store.state.isLoggedIn" @click.stop="addToWishlist(item)" class="mr-4"
+                :class="{ 'red--text': wishlist.includes(item) }">
+                mdi-heart
+              </v-icon>
+            </v-card-actions>
+            <router-link :to="`/movie/${item.id}`">
+              <div class="image-container">
+                <v-img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path" aspect-ratio="0.85"></v-img>
+              </div>
+            </router-link>
+            <v-card-title class="text-center font-weight-bold pa-4">{{ item.title }}</v-card-title>
+            <v-card-text class="text-center">{{ item.genres.join(', ') }}</v-card-text>
+          </v-card>
         </v-col>
       </v-row>
     </v-container>
@@ -35,7 +42,7 @@ import axios from 'axios';
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
 import 'swiper/swiper-bundle.css';
 import genresData from '../memory/genres.json';
-
+import '@mdi/font/css/materialdesignicons.css'
 
 export default {
   name: 'TrendingMovies',
@@ -76,27 +83,70 @@ export default {
   },
   methods: {
     async addToWishlist(movie) {
-      try {
-        const response = await axios.post('http://localhost:3000/user/addToWishlist', {
-          username: this.username, // Replace this with the actual username
-          movieID: movie.id,
-        });
+      const index = this.wishlist.findIndex(item => item.id === movie.id);
+      console.log('Index:', index);
+      if (index === -1) {
+        // Movie is not in wishlist, so add it
+        try {
+          console.log("username : ", this.$store.state.username, "movieId : ", movie.id);
 
-        if (response.status === 200) {
-          // The movie was successfully added to the wishlist
-          // You can add the movie to the local wishlist here if you want
-          if (!this.wishlist.find(item => item.id === movie.id)) {
+          const response = await axios.post('http://localhost:3000/user/addToWishlist', {
+            username: this.$store.state.username, // Replace this with the actual username
+            movieId: movie.id,
+          });
+
+          if (response.status === 200) {
+            console.log('Movie added to wishlist');
+            // The movie was successfully added to the wishlist
+            // You can add the movie to the local wishlist here if you want
             this.wishlist.push(movie);
+          } else {
+            // Handle the error
+            console.error('Failed to add the movie to the wishlist');
           }
-        } else {
+        } catch (error) {
           // Handle the error
-          console.error('Failed to add the movie to the wishlist');
+          console.error('Failed to add the movie to the wishlist', error);
         }
-      } catch (error) {
-        // Handle the error
-        console.error('Failed to add the movie to the wishlist', error);
+      } else {
+        console.log('Movie already in wishlist');
+        // Movie is already in wishlist, so remove it
+        this.wishlist.splice(index, 1);
+        // Send a request to the backend to remove the movie from the wishlist
+        try {
+          const response = await axios.post('http://localhost:3000/user/removeFromWishlist', {
+            username: this.$store.state.username, // Replace this with the actual username
+            movieId: movie.id,
+          });
+
+          if (response.status === 200) {
+            console.log('Movie removed from wishlist');
+          } else {
+            // Handle the error
+            console.error('Failed to remove the movie from wishlist');
+          }
+        } catch (error) {
+          console.error('Failed to remove movie from wishlist:', error);
+        }
       }
     },
+    // async getWishlist() {
+    //   try {
+    //     const response = await axios.post('http://localhost:3000/user/getWishlist', {
+    //       username: this.$store.state.username, // Replace this with the actual username
+    //     });
+
+    //     if (response.status === 200 && Array.isArray(response.data)) {
+    //       this.wishlist = response.data;
+    //     } else {
+    //       // Handle the error
+    //       console.error('Failed to fetch the wishlist');
+    //     }
+    //   } catch (error) {
+    //     // Handle the error
+    //     console.error('Failed to fetch the wishlist', error);
+    //   }
+    // },
     getAllMovies() {
       axios.get('http://localhost:3000/trend/getTrending')
         .then(response => {
@@ -116,6 +166,9 @@ export default {
   },
   created() {
     this.getAllMovies();
+    // if (this.$store.state.isLoggedIn) {
+    //   this.getWishlist();
+    // }
   },
 };
 </script>
@@ -146,6 +199,10 @@ export default {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   transition: 0.3s;
   cursor: pointer;
+}
+
+.image-container {
+  display: inline;
 }
 
 .swiper-slide:hover {
@@ -215,5 +272,13 @@ export default {
 .v-carousel__delimiter {
   background-color: #cc1515;
   opacity: 0.8;
+}
+
+.v-icon {
+  color: #757575;
+}
+
+.v-icon.red--text {
+  color: red;
 }
 </style>

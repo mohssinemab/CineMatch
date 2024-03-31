@@ -12,6 +12,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/vue-fontawesome": "^3.0.6",
+    "@mdi/font": "^7.4.47",
     "@vuetify/vite-plugin": "^1.0.0-alpha.11",
     "axios": "^1.6.8",
     "swiper": "^8.4.7",

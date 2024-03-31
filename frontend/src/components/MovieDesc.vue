@@ -85,7 +85,7 @@ export default {
                         'Authorization': `Bearer ${token}`,
                     },
                 });
-                console.log("Token-verify  : ", response.status);
+                // console.log("Token-verify  : ", response.status);
                 this.isLoggedIn = response.status === 200;
             } catch (error) {
                 this.isLoggedIn = false;
@@ -114,7 +114,7 @@ export default {
             .then(response => {
                 this.movie = response.data;
                 this.loading = false;
-                console.log(response.data)
+                // console.log(response.data)
             })
             .catch(error => {
                 console.error(error);

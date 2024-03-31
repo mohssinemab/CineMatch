@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import Home from "@/views/Home.vue";
 import Register from "@/views/Register.vue";
+import Wishlist from "@/views/Wishlist.vue";
 import Login from "@/views/Login.vue";
 import MovieDesc from "@/views/MovieDesc.vue";
 
@@ -32,5 +33,11 @@ export default new Router({
       component: MovieDesc,
       props: true,
     },
+    {
+      path: "/WishList",
+      name: "WishList",
+      component: Wishlist,
+    },
+    
   ],
 });
