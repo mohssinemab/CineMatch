@@ -1,28 +1,28 @@
-const MovieModel = require("../models/Movie")
+const MovieModel = require("../models/Movie");
 const options = {
-    method: 'GET',
-    headers: {
-      accept: 'application/json',
-      Authorization: `Bearer ${process.env.API_KEY}`
-    }
-  };
+  method: "GET",
+  headers: {
+    accept: "application/json",
+    Authorization: `Bearer ${process.env.API_KEY}`,
+  }
+};
 
-exports.getTrending = async (req, res) => {
+const axios = require("axios");
 
-    try{
-        const url = 'https://api.themoviedb.org/3/trending/all/week?language=en-US';
+exports.getMovieDesc = async (req, res) => {
+  const movieId = req.params.id;
 
-        fetch(url, options)
-        .then(res => res.json())
-        .then(json => console.log(json))
-        .catch(err => console.error('error:' + err));
+  const url = `https://api.themoviedb.org/3/movie/${movieId}`;
 
-        console.log("All done homie");
-        res.send("All done homie");
+  axios(url, options)
+  .then((response) => {
+    console.log("Movie Desc : ",response.data);
+      res.json(response.data); 
+  })
+  .catch((err) => {
+      console.error("error:" + err);
+      res.status(500).json({ error: 'An error occurred while fetching the movie details' });
+  });
 
-    } catch (error) {ha
-        console.error('Error getting trending : ', error);
-        res.status(500).send('Internal Server Error');
-    }
-    
+
 }

@@ -22,12 +22,32 @@ const router = createRouter({
 const store = createStore({
   state: {
     isLoggedIn: false,
+    userName: null,
+    searchResults: [], // Add this line
+    isSearching: false // Add this line
   },
   mutations: {
-    login(state) {
+    login(state, userName) {
       state.isLoggedIn = true;
+      state.userName = userName;
     },
+    logout(state) {
+      state.isLoggedIn = false;
+      state.userName = null;
+    },
+    setSearchResults(state, results) { // Add this line
+      state.searchResults = results;
+    },
+    setIsSearching(state, value) { // Add this line
+      state.isSearching = value;
+    }
   },
+  actions: {
+    updateSearchResults({ commit }, results) { // Add this line
+      commit('setSearchResults', results);
+      commit('setIsSearching', results.length > 0);
+    }
+  }
 });
 
 const vuetify = createVuetify({

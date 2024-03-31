@@ -60,6 +60,7 @@ exports.loginUser = (req, res) => {
             {}
           );
           return res.status(200).json({
+            name : user.name,
             message: "login success",
             token: token,
           });
@@ -148,4 +149,40 @@ exports.getWishList = async (req, res) => {
     console.error("Error getting wishlist:", error);
     res.status(500).send("Internal Server Error");
   }
+};
+
+exports.isLogged = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  console.log('Authorization Header:', authHeader); // Log the authorization header
+
+  if (token == null) {
+    console.log('No token provided');
+    return res.sendStatus(401); // if there isn't any token
+  }
+
+  jwt.verify(token, process.env.SIGN, (err, user) => {
+    if (err) {
+      console.log('Error verifying token:', err);
+      return res.sendStatus(403);
+    }
+
+    console.log('User verified:', user); // Log the verified user
+    req.user = user;
+    next(); // pass the execution off to whatever request the client intended
+  });
+};
+
+exports.verifyToken = (req, res) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (token == null) return res.sendStatus(401); 
+
+  jwt.verify(token, process.env.SIGN, (err, user) => {
+      if (err) return res.sendStatus(403);
+      console.log('User verified:', user);
+      res.sendStatus(200); 
+  });
 };

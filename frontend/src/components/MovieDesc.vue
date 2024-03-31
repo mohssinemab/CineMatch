@@ -11,8 +11,7 @@
                         <p><strong>Genres:</strong></p>
                         <v-chip v-for="genre in movie.genres" :key="genre.id" small>{{ genre.name }}</v-chip>
                         <p><strong>Language:</strong> {{ movie.original_language }}</p>
-                        <p><strong>Rating:</strong></p>
-                        <v-rating v-model="movie.vote_average" readonly half-increments></v-rating>
+                        <p><strong>Rating:</strong> {{ movie.vote_average }}</p>
                         <p><strong>Production Companies:</strong></p>
                         <ul class="production-companies">
                             <li v-for="company in movie.production_companies" :key="company.id">
@@ -22,10 +21,15 @@
                         </ul>
                         <p><strong>Production Countries:</strong> {{ formattedProductionCountries }}</p>
                     </v-card-text>
-                    <v-card-text>
-                        <!-- ... rest of the card text ... -->
+                    <v-card-text v-if="isLoggedIn">
                         <p><strong>Your Rating:</strong></p>
-                        <v-rating v-model="userRating" @input="saveRating" half-increments></v-rating>
+                        <div class="rating-input">
+                            <input type="number" v-model.number="userRating" min="0" max="10" step="0.5">
+                            <button class="custom-button" @click="saveRating">Submit</button>
+                        </div>
+                    </v-card-text>
+                    <v-card-text v-else>
+                        <p>You must be logged in to rate this movie.</p>
                     </v-card-text>
                 </v-card>
             </v-col>
@@ -47,8 +51,10 @@ export default {
     data() {
         return {
             movie: {},
-            loading: true, // Add this line
-            placeholderLogo: PH_logo, // Placeholder logo image
+            loading: true,
+            placeholderLogo: PH_logo,
+            userRating: 0,
+            isLoggedIn: false,
         };
     },
     computed: {
@@ -66,20 +72,49 @@ export default {
         getCompanyLogo(company) {
             return company.logo_path ? 'https://image.tmdb.org/t/p/w200' + company.logo_path : this.placeholderLogo;
         },
+        async checkIfLoggedIn() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                this.isLoggedIn = false;
+                return;
+            }
+
+            try {
+                const response = await axios.get('http://localhost:3000/user/verify-token', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+                console.log("Token-verify  : ", response.status);
+                this.isLoggedIn = response.status === 200;
+            } catch (error) {
+                this.isLoggedIn = false;
+            }
+        },
+        saveRating() {
+            if (!this.isLoggedIn) {
+                console.error('User is not logged in');
+                return;
+            }
+
+            const token = localStorage.getItem('token'); // Get the token from local storage
+            if (!token) {
+                console.error('No token found');
+                return;
+            }
+
+            console.log('Saving rating:', this.userRating);
+        },
     },
-    created() {
+    async created() {
+        await this.checkIfLoggedIn();
         const id = this.$route.params.id;
-        const options = {
-            method: "GET",
-            headers: {
-                accept: "application/json",
-                Authorization: `Bearer ${import.meta.env.VITE_APP_API_KEY}`,
-            },
-        };
-        axios(`https://api.themoviedb.org/3/movie/${id}`, options)
+
+        axios.get(`http://localhost:3000/movie/details/${id}`)
             .then(response => {
                 this.movie = response.data;
-                this.loading = false; // Add this line
+                this.loading = false;
+                console.log(response.data)
             })
             .catch(error => {
                 console.error(error);
@@ -119,5 +154,26 @@ export default {
 .production-companies span {
     font-size: 14px;
     font-weight: bold;
+}
+
+input[type="number"] {
+    height: 20px;
+    padding: 0 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 12px;
+    margin-right: 5px;
+}
+
+.custom-button {
+    height: 20px;
+    padding: 0 10px;
+    background-color: #1976d2;
+    /* Primary color */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
 }
 </style>

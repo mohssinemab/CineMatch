@@ -1,4 +1,6 @@
 const fetch = require("node-fetch");
+const genresData = require('./files/genres.json');
+
 
 const options = {
   method: "GET",
@@ -14,11 +16,18 @@ exports.getTrending = async (req, res) => {
   
       const response = await fetch(url, options);
       const json = await response.json();
+
+      const genreIdToName = {};
+      genresData.genres.forEach(genre => {
+        genreIdToName[genre.id] = genre.name;
+      });
   
       const data = json.results.map((item) => ({
+        
         poster_path: item.poster_path,
         id: item.id,
-        title: item.title 
+        title: item.title,
+        genres : item.genre_ids.map(id => genreIdToName[id] || 'Unknown')
       }));
   
       console.log("All trending done homie : ", data );

@@ -1,29 +1,22 @@
 <template>
   <div>
-    <TrendingMovies v-if="isLoggedIn" />
-    <div v-else>
-      <h1>Please log in to see trending movies.</h1>
-    </div>
+    <SearchResults v-if="isSearching" :results="searchResults" />
+    <TrendingMovies v-else />
   </div>
-
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import TrendingMovies from './TrendingMovies.vue';
+import SearchResults from './SearchResults.vue';
 
 export default {
   name: 'Home',
   components: {
     TrendingMovies,
+    SearchResults
   },
-  computed: {
-    isLoggedIn() {
-      // console.log("isLoggedIn : "+this.$store.state.isLoggedIn);
-      // return this.$store.state.isLoggedIn;
-      return true;
-
-    },
-  },
+  computed: mapState(['searchResults', 'isSearching'])
 };
 </script>
 

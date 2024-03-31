@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { getTrending} = require('../controllers/movieController')
+const { getMovieDesc} = require('../controllers/movieController');
+const { isLogged} = require('../controllers/userController')
 
 
 
-router.get('/getTrending', getTrending)
+
+router.get('/details/:id', getMovieDesc)
 
 
 module.exports = router;
