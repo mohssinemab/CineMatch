@@ -37,7 +37,6 @@ const store = createStore({
       state.name = name;
     },
     setUsername(state, username) {
-      // Add this line
       state.username = username;
     },
     logout(state) {

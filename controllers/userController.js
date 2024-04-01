@@ -159,11 +159,12 @@ exports.isLogged = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
-  console.log('Authorization Header:', authHeader); // Log the authorization header
+  console.log('Authorization Header:', authHeader);
 
   if (token == null) {
     console.log('No token provided');
-    return res.sendStatus(401); // if there isn't any token
+    return res.sendStatus(401); 
+  
   }
 
   jwt.verify(token, process.env.SIGN, (err, user) => {
@@ -174,7 +175,7 @@ exports.isLogged = (req, res, next) => {
 
     // console.log('User verified:', user); // Log the verified user
     req.user = user;
-    next(); // pass the execution off to whatever request the client intended
+    next(); 
   });
 };
 

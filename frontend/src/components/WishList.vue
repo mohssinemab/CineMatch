@@ -39,7 +39,6 @@ export default {
       if (index !== -1) {
         this.wishlist.splice(index, 1);
 
-        // Call the API to remove the movie from the wishlist
         await axios.post('http://localhost:3000/user/removeFromWishlist', {
           username: this.$store.state.username, // Replace this with the actual username
           movieId: movie.id,
@@ -71,20 +70,11 @@ export default {
         console.log("movies", this.movies);
 
       } else {
-        // Handle the error
         console.error('Failed to fetch the wishlist');
       }
     } catch (error) {
-      // Handle the error
       console.error('Failed to fetch the wishlist', error);
     }
   },
 };
 </script>
-
-<!-- <style scoped>
-
-.v-icon.red--text {
-  color: red;
-}
-</style> -->

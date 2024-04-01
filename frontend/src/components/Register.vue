@@ -108,25 +108,18 @@ export default {
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
 }
 
-/* .alert-message {
-    margin-top: 10px;
-    font-size: 15px;
-    text-align: center;
-} */
-
 
 .alert-message {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 50px; /* Adjust this value as needed */
+    height: 50px; 
     margin-top: 10px ;
     font-size: 15px;
     text-align: center;
 }
 
-/* Responsive styles */
 @media (max-width: 600px) {
     .register-form {
         padding: 1em;

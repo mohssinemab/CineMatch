@@ -18,8 +18,8 @@
           <v-card class="elevation-2 mb-4 item">
             <v-card-actions class="pa-0">
               <v-spacer></v-spacer>
-              <v-icon v-if="$store.state.isLoggedIn" @click.stop="addToWishlist(item)" class="mr-4"
-                :class="{ 'red--text': wishlist.includes(item) }">
+              <v-icon v-if="this.$store.state.isLoggedIn" @click.stop="toggleWishlist(item)" class="mr-4"
+                :color="wishlist.includes(item.id) ? 'red' : 'default'">
                 mdi-heart
               </v-icon>
             </v-card-actions>
@@ -66,7 +66,7 @@ export default {
       genreMap: {},
       isLoading: true,
       selectedGenreName: null,
-      wishlist: [], // New data property for the wishlist
+      wishlist: [],
 
     };
   },
@@ -82,71 +82,26 @@ export default {
     },
   },
   methods: {
-    async addToWishlist(movie) {
-      const index = this.wishlist.findIndex(item => item.id === movie.id);
-      console.log('Index:', index);
-      if (index === -1) {
-        // Movie is not in wishlist, so add it
-        try {
-          console.log("username : ", this.$store.state.username, "movieId : ", movie.id);
-
-          const response = await axios.post('http://localhost:3000/user/addToWishlist', {
-            username: this.$store.state.username, // Replace this with the actual username
-            movieId: movie.id,
-          });
-
-          if (response.status === 200) {
-            console.log('Movie added to wishlist');
-            // The movie was successfully added to the wishlist
-            // You can add the movie to the local wishlist here if you want
-            this.wishlist.push(movie);
-          } else {
-            // Handle the error
-            console.error('Failed to add the movie to the wishlist');
-          }
-        } catch (error) {
-          // Handle the error
-          console.error('Failed to add the movie to the wishlist', error);
-        }
-      } else {
-        console.log('Movie already in wishlist');
-        // Movie is already in wishlist, so remove it
+    async toggleWishlist(movie) {
+      if (this.wishlist.includes(movie.id)) {
+        // Remove the movie from the wishlist
+        const index = this.wishlist.indexOf(movie.id);
         this.wishlist.splice(index, 1);
-        // Send a request to the backend to remove the movie from the wishlist
-        try {
-          const response = await axios.post('http://localhost:3000/user/removeFromWishlist', {
-            username: this.$store.state.username, // Replace this with the actual username
-            movieId: movie.id,
-          });
 
-          if (response.status === 200) {
-            console.log('Movie removed from wishlist');
-          } else {
-            // Handle the error
-            console.error('Failed to remove the movie from wishlist');
-          }
-        } catch (error) {
-          console.error('Failed to remove movie from wishlist:', error);
-        }
+        await axios.post('http://localhost:3000/user/removeFromWishlist', {
+          username: this.$store.state.username, // Replace this with the actual username
+          movieId: movie.id,
+        });
+      } else {
+        // Add the movie to the wishlist
+        this.wishlist.push(movie.id);
+
+        await axios.post('http://localhost:3000/user/addToWishlist', {
+          username: this.$store.state.username, // Replace this with the actual username
+          movieId: movie.id,
+        });
       }
     },
-    // async getWishlist() {
-    //   try {
-    //     const response = await axios.post('http://localhost:3000/user/getWishlist', {
-    //       username: this.$store.state.username, // Replace this with the actual username
-    //     });
-
-    //     if (response.status === 200 && Array.isArray(response.data)) {
-    //       this.wishlist = response.data;
-    //     } else {
-    //       // Handle the error
-    //       console.error('Failed to fetch the wishlist');
-    //     }
-    //   } catch (error) {
-    //     // Handle the error
-    //     console.error('Failed to fetch the wishlist', error);
-    //   }
-    // },
     getAllMovies() {
       axios.get('http://localhost:3000/trend/getTrending')
         .then(response => {
@@ -164,11 +119,20 @@ export default {
       console.log(id);
     },
   },
-  created() {
+  async created() {
     this.getAllMovies();
-    // if (this.$store.state.isLoggedIn) {
-    //   this.getWishlist();
-    // }
+    if (this.$store.state.isLoggedIn) {
+      // Fetch the wishlist 
+      const response = await axios.post('http://localhost:3000/user/getWishlist', {
+        username: this.$store.state.username,
+      });
+
+      console.log("username : ", this.$store.state.username, " - response : ", response);
+      console.log("response.data.wishlist : ", response.data.wishlist);
+
+      // Update the wishlist
+      this.wishlist = response.data.wishlist;
+    }
   },
 };
 </script>
