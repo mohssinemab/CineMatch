@@ -113,14 +113,13 @@ export default {
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 50px; /* Adjust this value as needed */
+    height: 50px;
     margin-top: 10px ;
     font-size: 15px;
     text-align: center;
 }
 
 
-/* Responsive styles */
 @media (max-width: 600px) {
     .login-form {
         padding: 1em;

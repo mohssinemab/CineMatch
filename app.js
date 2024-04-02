@@ -16,7 +16,7 @@ app.get('/', function (req, res) {
 require('dotenv').config();
 
 
-//Database Connection
+//DB Connection
 mongoose.connect(process.env.DATABASE)
   .then(() => console.log('Mongo : Connecté avec succès'))
   .catch(() => console.log('Mongo : Echec de connexion à la base de données'))

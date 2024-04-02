@@ -40,7 +40,7 @@ export default {
         this.wishlist.splice(index, 1);
 
         await axios.post('http://localhost:3000/user/removeFromWishlist', {
-          username: this.$store.state.username, // Replace this with the actual username
+          username: this.$store.state.username, 
           movieId: movie.id,
         });
 
@@ -53,7 +53,7 @@ export default {
     try {
       console.log("username", this.$store.state.username);
       const response = await axios.post('http://localhost:3000/user/getWishlist', {
-        username: this.$store.state.username, // Replace this with the actual username
+        username: this.$store.state.username, 
       });
 
       if (response.status === 200) {

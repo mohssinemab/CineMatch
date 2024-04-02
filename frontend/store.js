@@ -7,7 +7,7 @@ export default new Vuex.Store({
   state: {
     isLoggedIn: false,
     name: '',
-    username: '', // New state
+    username: '', 
     searchResults: [],
     isSearching: false
   },
@@ -16,7 +16,7 @@ export default new Vuex.Store({
       state.isLoggedIn = true;
       state.name = name;
     },
-    setUsername(state, username) { // New mutation
+    setUsername(state, username) { 
       state.username = username;
     },
     logout(state) {

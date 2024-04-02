@@ -89,7 +89,7 @@ export default {
         this.wishlist.splice(index, 1);
 
         await axios.post('http://localhost:3000/user/removeFromWishlist', {
-          username: this.$store.state.username, // Replace this with the actual username
+          username: this.$store.state.username, 
           movieId: movie.id,
         });
       } else {
@@ -97,7 +97,7 @@ export default {
         this.wishlist.push(movie.id);
 
         await axios.post('http://localhost:3000/user/addToWishlist', {
-          username: this.$store.state.username, // Replace this with the actual username
+          username: this.$store.state.username,
           movieId: movie.id,
         });
       }

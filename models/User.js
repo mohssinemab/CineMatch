@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
         required: true,
     },
     favoriteGenres: [{ type: Number }], // Array of genres
-    wishlist: [{ type: Number }],  // Array of movie IDs
+    wishlist: [{ type: Number }],  // Array of movie IDs in Wishlist
     ratings: [{
         movieId: Number,
         rating: Number

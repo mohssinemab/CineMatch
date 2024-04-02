@@ -103,7 +103,7 @@ export default {
                 return;
             }
 
-            const token = localStorage.getItem('token'); // Get the token from local storage
+            const token = localStorage.getItem('token'); 
             if (!token) {
                 console.error('No token found');
                 return;
@@ -111,7 +111,7 @@ export default {
 
             axios.post('http://localhost:3000/user/rateMovie', {
                 username: this.$store.state.username,
-                movieId: this.movie.id, // Assuming you have the movie ID in your data
+                movieId: this.movie.id, 
                 rating: this.userRating
             }, {
                 headers: {
@@ -136,7 +136,6 @@ export default {
             .then(response => {
                 this.movie = response.data;
                 this.loading = false;
-                // console.log(response.data)
             })
             .catch(error => {
                 console.error(error);

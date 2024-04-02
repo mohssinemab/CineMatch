@@ -45,7 +45,7 @@ export default {
             registerSuccess: false,
             registerFailed: false,
             favoriteGenres: [],
-            genres: genresData.genres.map(genre => genre.name), // Use the imported genres data
+            genres: genresData.genres.map(genre => genre.name), // Extract the genre names
             genreMap: genresData.genres.reduce((map, genre) => ({ ...map, [genre.name]: genre.id }), {})
         };
     },
@@ -88,7 +88,6 @@ export default {
                     axios.get(`http://localhost:3000/user/getSuggestions/${this.username}`)
                         .then((response) => {
                             console.log(" Response suggestions in front : ",response.data);
-                            // this.$store.commit('setSuggestions', response.data);
                         })
                         .catch((error) => {
                             console.error('Error:', error);

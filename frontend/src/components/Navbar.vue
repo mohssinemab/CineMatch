@@ -42,8 +42,7 @@ export default {
             localStorage.removeItem('token');
             localStorage.removeItem('name');
             localStorage.removeItem('username');
-            this.$store.commit('setLoggedIn', false); // Update the loggedIn state
-
+            this.$store.commit('setLoggedIn', false); 
             this.$router.push('/');
         },
         searchMovies() {
@@ -76,7 +75,7 @@ export default {
         },
         resetSearch() {
             this.$store.dispatch('updateSearchResults', []);
-            this.searchQuery = ''; // Add this line
+            this.searchQuery = '';
         }
     },
 };
