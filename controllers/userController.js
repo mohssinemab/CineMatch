@@ -2,6 +2,9 @@ const UserModel = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+const fetch = require('node-fetch'); 
+
+
 exports.registerUser = async (req, res) => {
   console.log("registerUser Route");
   try {
@@ -154,6 +157,39 @@ exports.getWishList = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
+
+exports.getSuggestions = async (req, res) => {
+  try {
+    const username = req.params.username;
+    console.log("Suggestions - username : ", username);
+
+    const user = await UserModel.findOne({ username: username });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    console.log("Suggestions - user : ", user);
+
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${process.env.API_KEY}`,
+      },
+    };
+
+    const url = `https://api.themoviedb.org/3/discover/movie?with_genres=${user.favoriteGenres.join(',')}`;
+
+    const tmdbResponse = await fetch(url, options);
+    const data = await tmdbResponse.json();
+    console.log(" tmdbResponse : ", data.results);
+
+    res.status(200).json({ movies: data.results });
+
+  } catch (error) {
+    console.error("Error getting favorite genres:", error);
+    res.status(500).send("Internal Server Error");
+  }
+}
 
 exports.isLogged = (req, res, next) => {
   const authHeader = req.headers['authorization'];

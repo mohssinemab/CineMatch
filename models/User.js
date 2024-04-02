@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    favoriteGenres: [{ type: String }], // Array of genres
+    favoriteGenres: [{ type: Number }], // Array of genres
     wishlist: [{ type: Number }]  // Array of movie IDs
 }, { timestamps: true })
 

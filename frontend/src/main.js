@@ -7,6 +7,8 @@ import Register from "./components/Register.vue";
 import Login from "./components/Login.vue";
 import MovieDesc from "./components/MovieDesc.vue";
 import WishList from "./components/WishList.vue";
+import Suggestions from "./components/Suggestions.vue";
+
 
 import { createVuetify } from "vuetify";
 import "vuetify/dist/vuetify.min.css";
@@ -19,6 +21,8 @@ const router = createRouter({
     { path: "/login", component: Login },
     { path: "/movie/:id", component: MovieDesc },
     { path: "/WishList", component: WishList },
+    { path: "/Suggestions", component: Suggestions },
+
 
   ],
 });

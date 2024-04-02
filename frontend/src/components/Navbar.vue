@@ -11,7 +11,9 @@
 
         <div v-if="isLoggedIn">
             <span>Welcome, {{ name }}</span>
-            <router-link to="/wishlist" class="nav-link">Wishlist</router-link>
+            <router-link to="/wishlist" class="nav-link ">Wishlist</router-link>
+            <router-link to="/suggestions" class="nav-link">Suggestions</router-link>
+
             <button @click="logout" class="nav-link">Logout</button>
         </div>
         <div v-else>
@@ -60,6 +62,16 @@ export default {
                 .catch(error => {
                     console.error(error);
                     this.searchQuery = '';
+                });
+        },
+
+        getSuggestions() {
+            axios.get(`http://localhost:3000/user/getSuggestions/${this.username}`)
+                .then((response) => {
+                    this.movies = response.data.movies;
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
                 });
         },
         resetSearch() {

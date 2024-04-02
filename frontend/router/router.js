@@ -5,6 +5,8 @@ import Register from "@/views/Register.vue";
 import Wishlist from "@/views/Wishlist.vue";
 import Login from "@/views/Login.vue";
 import MovieDesc from "@/views/MovieDesc.vue";
+import Suggestions from "@/views/Suggestions.vue";
+
 
 Vue.use(Router);
 
@@ -37,6 +39,11 @@ export default new Router({
       path: "/WishList",
       name: "WishList",
       component: Wishlist,
+    },
+    {
+      path: "/Suggestions",
+      name: "Suggestions",
+      component: Suggestions,
     },
     
   ],

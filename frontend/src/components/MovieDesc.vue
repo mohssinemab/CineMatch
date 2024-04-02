@@ -24,9 +24,13 @@
                     <v-card-text v-if="isLoggedIn">
                         <p><strong>Your Rating:</strong></p>
                         <div class="rating-input">
-                            <input type="number" v-model.number="userRating" min="0" max="10" step="0.5">
-                            <button class="custom-button" @click="saveRating">Submit</button>
+                            <div class="submit-section"> 
+                                <input type="number" v-model.number="userRating" min="0" max="10" step="0.5">
+                                <button class="custom-button" @click="saveRating">Submit</button>
+                                <p>{{ message }}</p> 
+                            </div> 
                         </div>
+
                     </v-card-text>
                     <v-card-text v-else>
                         <p>You must be logged in to rate this movie.</p>
@@ -55,6 +59,7 @@ export default {
             placeholderLogo: PH_logo,
             userRating: 0,
             isLoggedIn: false,
+            message: '',
         };
     },
     computed: {
@@ -104,6 +109,7 @@ export default {
             }
 
             console.log('Saving rating:', this.userRating);
+            this.message = 'Rating submitted!';
         },
     },
     async created() {
@@ -165,6 +171,11 @@ input[type="number"] {
     margin-right: 5px;
 }
 
+.submit-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 .custom-button {
     height: 20px;
     padding: 0 10px;

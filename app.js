@@ -22,13 +22,11 @@ mongoose.connect(process.env.DATABASE)
   .catch(() => console.log('Mongo : Echec de connexion à la base de données'))
 
 
-const itemRoutes = require('./routes/itemRouter');
 const userRoutes = require('./routes/userRouter');
 const movieRoutes = require('./routes/movieRouter');
 const trendRoutes = require('./routes/trendingRouter');
 
 
-app.use('/item', itemRoutes);
 app.use('/user', userRoutes);
 app.use('/movie', movieRoutes);
 app.use('/trend', trendRoutes);

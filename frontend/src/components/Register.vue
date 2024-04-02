@@ -9,6 +9,15 @@
             <v-text-field label="Password" type="password" v-model="password" required outlined
                 color="#000000"></v-text-field>
 
+            <v-select
+              v-model="favoriteGenres"
+              :items="genres"
+              item-text="name"
+              item-value="id"
+              label="Favorite Genres"
+              multiple
+            ></v-select>
+
             <v-btn type="submit" color="#fecc00" class="submit-btn">Register</v-btn>
             <transition name="fade">
                 <v-alert v-if="registerSuccess" type="success" dense text outlined class="alert-message">
@@ -24,6 +33,9 @@
 
 
 <script>
+import genresData from '../memory/genres.json'; // Import the genres data
+import axios from 'axios';
+
 export default {
     data() {
         return {
@@ -32,6 +44,9 @@ export default {
             password: '',
             registerSuccess: false,
             registerFailed: false,
+            favoriteGenres: [],
+            genres: genresData.genres.map(genre => genre.name), // Use the imported genres data
+            genreMap: genresData.genres.reduce((map, genre) => ({ ...map, [genre.name]: genre.id }), {})
         };
     },
     methods: {
@@ -44,6 +59,10 @@ export default {
                 return;
             }
 
+            const favoriteGenreIds = this.favoriteGenres.map(name => this.genreMap[name]);
+
+            console.log("favoriteGenres : ",favoriteGenreIds);
+
             fetch('http://localhost:3000/user/register', {
                 method: 'POST',
                 headers: {
@@ -53,6 +72,7 @@ export default {
                     username: this.username,
                     name: this.name,
                     password: this.password,
+                    favoriteGenres: favoriteGenreIds,
                 }),
             })
                 .then(response => {
@@ -65,6 +85,14 @@ export default {
                     console.log(data);
                     this.registerSuccess = true;
 
+                    axios.get(`http://localhost:3000/user/getSuggestions/${this.username}`)
+                        .then((response) => {
+                            console.log(" Response suggestions in front : ",response.data);
+                            // this.$store.commit('setSuggestions', response.data);
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                        });
                     // Redirect to the home page after 2 seconds
                     setTimeout(() => {
                         this.$router.push('/');
