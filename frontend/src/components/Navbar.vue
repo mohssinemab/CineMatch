@@ -11,7 +11,7 @@
 
         <div v-if="isLoggedIn">
             <span>Welcome, {{ name }}</span>
-            <router-link to="/wishlist" class="nav-link ">Wishlist</router-link>
+            <router-link to="/wishlist" class="nav-link ">Watchlist</router-link>
             <router-link to="/suggestions" class="nav-link">Suggestions</router-link>
 
             <button @click="logout" class="nav-link">Logout</button>

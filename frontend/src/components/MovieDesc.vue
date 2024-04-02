@@ -12,6 +12,7 @@
                         <v-chip v-for="genre in movie.genres" :key="genre.id" small>{{ genre.name }}</v-chip>
                         <p><strong>Language:</strong> {{ movie.original_language }}</p>
                         <p><strong>Rating:</strong> {{ movie.vote_average }}</p>
+                        <p><strong>Popularity score:</strong> {{ movie.popularity }}</p>
                         <p><strong>Production Companies:</strong></p>
                         <ul class="production-companies">
                             <li v-for="company in movie.production_companies" :key="company.id">
@@ -24,11 +25,11 @@
                     <v-card-text v-if="isLoggedIn">
                         <p><strong>Your Rating:</strong></p>
                         <div class="rating-input">
-                            <div class="submit-section"> 
+                            <div class="submit-section">
                                 <input type="number" v-model.number="userRating" min="0" max="10" step="0.5">
                                 <button class="custom-button" @click="saveRating">Submit</button>
-                                <p>{{ message }}</p> 
-                            </div> 
+                                <p>{{ message }}</p>
+                            </div>
                         </div>
 
                     </v-card-text>
@@ -108,8 +109,23 @@ export default {
                 return;
             }
 
-            console.log('Saving rating:', this.userRating);
-            this.message = 'Rating submitted!';
+            axios.post('http://localhost:3000/user/rateMovie', {
+                username: this.$store.state.username,
+                movieId: this.movie.id, // Assuming you have the movie ID in your data
+                rating: this.userRating
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+                .then(response => {
+                    console.log('Rating saved successfully:', response.data);
+                    this.message = 'Rating submitted!';
+                })
+                .catch(error => {
+                    console.error('Error saving rating:', error);
+                    this.message = 'Error submitting rating';
+                });
         },
     },
     async created() {
@@ -172,10 +188,11 @@ input[type="number"] {
 }
 
 .submit-section {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
+
 .custom-button {
     height: 20px;
     padding: 0 10px;

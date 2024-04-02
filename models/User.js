@@ -20,7 +20,11 @@ const userSchema = new mongoose.Schema({
         required: true,
     },
     favoriteGenres: [{ type: Number }], // Array of genres
-    wishlist: [{ type: Number }]  // Array of movie IDs
+    wishlist: [{ type: Number }],  // Array of movie IDs
+    ratings: [{
+        movieId: Number,
+        rating: Number
+    }]
 }, { timestamps: true })
 
 module.exports = mongoose.model('User', userSchema);
