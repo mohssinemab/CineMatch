@@ -7,7 +7,7 @@
         </v-row>
         <v-row>
             <v-col cols="12" sm="6" md="4" lg="4" v-for="movie in sortedMovies" :key="movie.id">
-                <v-card class="elevation-2 mb-4 item">
+                <v-card class="elevation-2 mb-4 item color-background-card">
                     <router-link :to="`/movie/${movie.id}`">
                         <div class="image-container">
                             <v-img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path"
@@ -80,5 +80,7 @@ export default {
 </script>
 
 <style scoped>
-
+.color-background-card {
+    background-color: #f5f4f0;
+}
 </style>

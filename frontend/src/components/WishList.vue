@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col cols="12" sm="6" md="4" lg="4" v-for="movie in movies" :key="movie.id">
-        <v-card class="elevation-2 mb-4 item">
+        <v-card class="elevation-2 mb-4 item color-background-card">
           <v-card-actions class="pa-0">
             <v-spacer></v-spacer>
             <v-icon v-if="this.$store.state.isLoggedIn" @click.stop="removeFromWishlist(movie)" class="mr-4"
@@ -78,3 +78,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>  
+.color-background-card {
+    background-color: #f5f4f0;
+}
+</style>

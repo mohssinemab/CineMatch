@@ -4,7 +4,7 @@
             <v-row>
                 <v-col cols="12" sm="6" md="4" lg="4" v-for="result in filteredResults" :key="result.id">
                     <router-link :to="`/movie/${result.id}`">
-                        <v-card class="elevation-2 mb-4 item" @click="logId(result.id)">
+                        <v-card class="elevation-2 mb-4 item color-background-card" @click="logId(result.id)">
                             <v-img :src="'https://image.tmdb.org/t/p/w500' + result.poster_path" aspect-ratio="1">
                             </v-img>
                             <v-card-title class="text-center font-weight-bold pa-4">{{ result.title }}</v-card-title>
@@ -36,3 +36,9 @@ export default {
   }
 };
 </script>
+
+<style scoped> 
+.color-background-card {
+    background-color: #f5f4f0;
+}
+</style>

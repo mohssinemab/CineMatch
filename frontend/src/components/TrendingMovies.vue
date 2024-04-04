@@ -1,9 +1,9 @@
 <template>
   <div>
-    <v-carousel v-if="isDataLoaded" cycle height="650">
+    <v-carousel v-if="isDataLoaded" cycle height="650" class="color-background">
       <v-carousel-item v-for="item in slideshowItems" :key="item.id">
         <router-link :to="`/movie/${item.id}`">
-          <v-img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path" aspect-ratio="1.5" class="hover-effect">
+          <v-img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path" aspect-ratio="1.5" class="hover-effect poster-style">
             <v-container class="fill-height">
             </v-container>
           </v-img>
@@ -15,7 +15,7 @@
       <v-select :items="genreNames" v-model="selectedGenreName" label="Select a genre" outlined></v-select>
       <v-row>
         <v-col cols="12" sm="6" md="4" lg="4" v-for="item in filteredOtherItems" :key="item.id">
-          <v-card class="elevation-2 mb-4 item">
+          <v-card class="elevation-2 mb-4 item color-background-card" >
             <v-card-actions class="pa-0">
               <v-spacer></v-spacer>
               <v-icon v-if="this.$store.state.isLoggedIn" @click.stop="toggleWishlist(item)" class="mr-4"
@@ -219,6 +219,7 @@ export default {
   width: 50px;
   height: 50px;
   background-size: contain;
+  
 }
 
 .v-carousel__controls__item--prev {
@@ -234,7 +235,7 @@ export default {
 }
 
 .v-carousel__delimiter {
-  background-color: #cc1515;
+  background-color: #1518cc;
   opacity: 0.8;
 }
 
@@ -244,5 +245,24 @@ export default {
 
 .v-icon.red--text {
   color: red;
+}
+
+.color-background {
+    background-color: #f7f5f0;
+}
+
+.color-background-card {
+    background-color: #f5f4f0;
+}
+/* 
+.poster-style {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    border: 2px solid #000000;
+    transition: all 0.3s ease;
+} */
+
+.poster-style:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
 }
 </style>

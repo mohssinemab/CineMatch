@@ -1,4 +1,3 @@
-const MovieModel = require("../models/Movie");
 const options = {
   method: "GET",
   headers: {

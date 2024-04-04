@@ -25,12 +25,13 @@ exports.getTrending = async (req, res) => {
       const data = json.results.map((item) => ({
         
         poster_path: item.poster_path,
+        backdrop_path: item.backdrop_path,
         id: item.id,
         title: item.title,
         genres : item.genre_ids.map(id => genreIdToName[id] || 'Unknown')
       }));
   
-      console.log("All trending done homie : ");
+      console.log("All trending done homie ", data);
       res.status(200).send(data);
     } catch (error) {
       console.error("Error getting trending : ", error);

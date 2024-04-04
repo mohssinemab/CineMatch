@@ -9,22 +9,17 @@
             <v-text-field label="Password" type="password" v-model="password" required outlined
                 color="#000000"></v-text-field>
 
-            <v-select
-              v-model="favoriteGenres"
-              :items="genres"
-              item-text="name"
-              item-value="id"
-              label="Favorite Genres"
-              multiple
-            ></v-select>
+            <v-select v-model="favoriteGenres" :items="genres" item-text="name" item-value="id" label="Favorite genres"
+                multiple></v-select>
 
             <v-btn type="submit" color="#fecc00" class="submit-btn">Register</v-btn>
             <transition name="fade">
-                <v-alert v-if="registerSuccess" type="success" dense text outlined class="alert-message">
-                    Registration successful! Redirecting...
+                <v-alert v-if="registerSuccess" type="success" dense text outlined class="alert-message aligned-alert">
+                    Registration successful ! Redirecting...
                 </v-alert>
-                <v-alert v-else-if="registerFailed" type="error" dense text outlined class="alert-message">
-                    Register failed!
+                <v-alert v-else-if="registerFailed" type="error" dense text outlined
+                    class="alert-message aligned-alert">
+                    Register failed !
                 </v-alert>
             </transition>
         </v-form>
@@ -61,7 +56,7 @@ export default {
 
             const favoriteGenreIds = this.favoriteGenres.map(name => this.genreMap[name]);
 
-            console.log("favoriteGenres : ",favoriteGenreIds);
+            console.log("favoriteGenres : ", favoriteGenreIds);
 
             fetch('http://localhost:3000/user/register', {
                 method: 'POST',
@@ -87,7 +82,7 @@ export default {
 
                     axios.get(`http://localhost:3000/user/getSuggestions/${this.username}`)
                         .then((response) => {
-                            console.log(" Response suggestions in front : ",response.data);
+                            console.log(" Response suggestions in front : ", response.data);
                         })
                         .catch((error) => {
                             console.error('Error:', error);
@@ -141,10 +136,15 @@ export default {
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 50px; 
-    margin-top: 10px ;
+    height: 50px;
+    margin-top: 10px;
     font-size: 15px;
     text-align: center;
+}
+
+.aligned-alert {
+    display: flex;
+    align-items: center;
 }
 
 @media (max-width: 600px) {
